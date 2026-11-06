@@ -17,30 +17,16 @@
   p { color: var(--suave); margin: 0 0 24px; }
   a.btn { display: block; background: var(--azul); color: #fff; text-decoration: none; font-weight: 600; font-size: 17px;
           padding: 14px 20px; border-radius: 12px; margin-bottom: 12px; }
-  a.btn.alt { background: #fff; color: var(--texto); border: 1px solid var(--borde); }
-  a.aqui { color: var(--suave); font-size: 14px; }
-  .ios { display: none; }
-  body.es-ios .ios { display: block; }
-  body.es-ios .no-ios { display: none; }
   small { display: block; margin-top: 20px; color: var(--suave); font-size: 13px; }
 </style>
 </head>
 <body>
 <main>
   <img src="lockup.png" alt="Opina+">
-  <div class="no-ios">
-    <h1>Abriendo Opina+ en tu navegador…</h1>
-    <p>Así tu sesión te queda guardada para la próxima vez.</p>
-    <a class="btn" href="https://opinamas-app.vercel.app/login">Entrar a Opina+</a>
-    <small>¿No se abrió solo? Toca el botón. Si estás dentro de WhatsApp, también puedes usar «Abrir en Chrome».</small>
-  </div>
-  <div class="ios">
-    <h1>¿Con qué navegador abres Opina+?</h1>
-    <p>Así tu sesión te queda guardada para la próxima vez.</p>
-    <a class="btn" href="x-safari-https://opinamas-app.vercel.app/login">Abrir en Safari</a>
-    <a class="btn alt" href="googlechromes://opinamas-app.vercel.app/login">Abrir en Chrome</a>
-    <a class="aqui" href="https://opinamas-app.vercel.app/login">o seguir aquí</a>
-  </div>
+  <h1>Abriendo Opina+ en tu navegador…</h1>
+  <p>Así no se te pierde al cerrar WhatsApp y tu sesión queda guardada.</p>
+  <a class="btn" id="entrar" href="https://opinamas-app.vercel.app/login">Entrar a Opina+</a>
+  <small>¿No se abrió solo? Toca el botón.</small>
 </main>
 <script>
   // Página puente: los botones de WhatsApp abren los enlaces dentro de WhatsApp.
@@ -50,10 +36,13 @@
     var destino = "https://" + host;
     var ua = navigator.userAgent || "";
     if (/Android/i.test(ua)) {
-      location.href = "intent://" + host + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(destino) + ";end";
+      var chrome = "intent://" + host + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(destino) + ";end";
+      location.href = chrome;
+      document.getElementById("entrar").href = chrome;
     } else if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
-      // iPhone no informa el navegador predeterminado: se elige (Safari, Chrome o seguir aquí).
-      document.body.classList.add("es-ios");
+      // iPhone no informa el navegador predeterminado: Safari es el único garantizado (iOS 17 o más nuevo).
+      location.href = "x-safari-" + destino;
+      document.getElementById("entrar").href = "x-safari-" + destino;
     } else {
       location.replace(destino); // computador (WhatsApp Web): directo
     }
