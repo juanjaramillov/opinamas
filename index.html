@@ -40,9 +40,13 @@
       location.href = chrome;
       document.getElementById("entrar").href = chrome;
     } else if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
-      // iPhone no informa el navegador predeterminado: Safari es el único garantizado (iOS 17 o más nuevo).
-      location.href = "x-safari-" + destino;
+      // iPhone no informa el navegador predeterminado: se intenta Chrome y, si no se abrió en 1,5 s, Safari (iOS 17+).
+      var salio = false;
+      document.addEventListener("visibilitychange", function () { if (document.hidden) salio = true; });
+      window.addEventListener("pagehide", function () { salio = true; });
       document.getElementById("entrar").href = "x-safari-" + destino;
+      location.href = "googlechromes://" + host;
+      setTimeout(function () { if (!salio) location.href = "x-safari-" + destino; }, 1500);
     } else {
       location.replace(destino); // computador (WhatsApp Web): directo
     }
