@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Opina+</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root { --azul: #2563EB; --texto: #0F172A; --suave: #475569; --fondo: #F8FAFC; --borde: #E2E8F0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--fondo); color: var(--texto);
+         font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 24px 16px; }
+  main { width: 100%; max-width: 380px; text-align: center; }
+  img { width: 180px; height: auto; margin: 0 auto 28px; display: block; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  p { color: var(--suave); margin: 0 0 24px; }
+  a.btn { display: block; background: var(--azul); color: #fff; text-decoration: none; font-weight: 600; font-size: 17px;
+          padding: 14px 20px; border-radius: 12px; }
+  small { display: block; margin-top: 20px; color: var(--suave); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <img src="lockup.png" alt="Opina+">
+  <h1>Abriendo Opina+ en tu navegador…</h1>
+  <p>Así tu sesión te queda guardada para la próxima vez.</p>
+  <a class="btn" id="entrar" href="https://opinamas-app.vercel.app/login">Entrar a Opina+</a>
+  <small>¿No se abrió solo? Toca el botón. Si estás dentro de WhatsApp, también puedes usar «Abrir en Chrome» o el ícono de Safari.</small>
+</main>
+<script>
+  // Página puente: los botones de WhatsApp abren los enlaces dentro de WhatsApp.
+  // Aquí se pide abrir Opina+ en el navegador del teléfono; si no se puede, queda el botón.
+  (function () {
+    var host = "opinamas-app.vercel.app/login";
+    var destino = "https://" + host;
+    var ua = navigator.userAgent || "";
+    if (/Android/i.test(ua)) {
+      location.href = "intent://" + host + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(destino) + ";end";
+    } else if (/iPhone|iPad|iPod/i.test(ua)) {
+      location.href = "x-safari-" + destino; // iOS 17 o más nuevo: abre Safari
+    } else {
+      location.replace(destino); // computador (WhatsApp Web): directo
+    }
+  })();
+</script>
+</body>
+</html>
